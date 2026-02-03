@@ -95,6 +95,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Fix Rollup native optional dependency on Linux (npm/lockfile edge case)
+        shell: bash
+        run: |
+          node -e "require('@rollup/rollup-linux-x64-gnu')" 2>/dev/null && exit 0 || true
+          ROLLUP_VERSION="$(node -p "require('rollup/package.json').version")"
+          echo "Installing @rollup/rollup-linux-x64-gnu@$ROLLUP_VERSION"
+          npm i --no-save --no-package-lock "@rollup/rollup-linux-x64-gnu@$ROLLUP_VERSION"
+
       - name: Build app (typecheck + electron-vite build)
         run: npm run build
 
