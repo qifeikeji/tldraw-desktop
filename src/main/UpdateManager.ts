@@ -28,6 +28,11 @@ export class UpdateManager {
 	async dispose() {}
 
 	async initialize() {
+		// Allow disabling update checks entirely (useful for offline environments)
+		if (process.argv.includes('--no-updates') || process.env.TLDRAW_DISABLE_UPDATES === '1') {
+			return
+		}
+
 		if (process.env.NODE_ENV === 'development') {
 			// In development, read update configuration from dev-app-update.yml
 			autoUpdater.updateConfigPath = 'dev-app-update.yml'
@@ -40,11 +45,13 @@ export class UpdateManager {
 		// Check if user has auto-updates enabled
 		const userPrefs = this.mainManager.store.getUserPreferences()
 		if (userPrefs.autoCheckUpdates) {
-			try {
-				await this.checkForUpdates(false) // false = background check
-			} catch (error) {
-				console.error('Error checking for updates:', error)
-			}
+			// Do not block app startup on network / GitHub timeouts.
+			// Run the check in the background shortly after the app is ready.
+			setTimeout(() => {
+				this.checkForUpdates(false).catch((error) => {
+					console.error('Error checking for updates:', error)
+				})
+			}, 1500)
 		}
 	}
 
