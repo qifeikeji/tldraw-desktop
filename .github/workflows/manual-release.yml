@@ -113,7 +113,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ **Released v${{ steps.new_version.outputs.version }}**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "The [Release workflow](/${{ github.repository }}/actions/workflows/release.yml) will now build and publish the release." >> $GITHUB_STEP_SUMMARY
+          echo "Now run the [Release workflow](/${{ github.repository }}/actions/workflows/release.yml) and provide tag **v${{ steps.new_version.outputs.version }}** to build & upload the Linux x64 AppImage." >> $GITHUB_STEP_SUMMARY
 
       - name: Dry run summary
         if: ${{ inputs.dry_run }}

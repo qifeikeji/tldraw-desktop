@@ -1,13 +1,6 @@
 name: Update tldraw
 
 on:
-  # Triggered by tldraw repo on new releases
-  repository_dispatch:
-    types: [tldraw-release]
-  # Fallback: weekly check in case webhook fails
-  schedule:
-    - cron: '0 9 * * 0' # Sundays at 9am UTC
-  # Manual trigger
   workflow_dispatch:
     inputs:
       tag:
